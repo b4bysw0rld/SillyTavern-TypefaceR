@@ -30,16 +30,12 @@
                     <div class="tfr-form-row">
                         <label for="tfr-global-font-family">
                             Font Family
-                            <span class="fa-solid fa-circle-info opacity50p tfr-info-icon" title="Enter any font name. Use quotes for fonts with spaces, e.g., 'Comic Sans MS'"></span>
+                            <span class="fa-solid fa-circle-info opacity50p tfr-info-icon" title="Enter a font name or click one of your imported fonts below."></span>
                         </label>
-                        <input type="text" id="tfr-global-font-family" placeholder="e.g., Arial, 'Times New Roman', sans-serif" />
-                        <div class="tfr-quick-fonts">
-                            <button class="tfr-quick-font-btn" data-font="Arial">Arial</button>
-                            <button class="tfr-quick-font-btn" data-font="Georgia">Georgia</button>
-                            <button class="tfr-quick-font-btn" data-font="'Times New Roman'">Times</button>
-                            <button class="tfr-quick-font-btn" data-font="Verdana">Verdana</button>
-                            <button class="tfr-quick-font-btn" data-font="'Courier New'">Courier</button>
-                            <button class="tfr-quick-font-btn" data-font="system-ui">System</button>
+                        <input type="text" id="tfr-global-font-family" placeholder="Type a font name or select from your fonts below..." />
+                        <div class="tfr-your-fonts" id="tfr-global-your-fonts">
+                            <span class="tfr-your-fonts-label">Your Fonts:</span>
+                            <span class="tfr-no-fonts-msg">Import fonts in the Google Fonts section below</span>
                         </div>
                     </div>
 
@@ -98,12 +94,10 @@
                     <div id="tfr-user-settings-content" style="display: none;">
                         <div class="tfr-form-row">
                             <label for="tfr-user-font-family">Font Family</label>
-                            <input type="text" id="tfr-user-font-family" placeholder="e.g., Arial, sans-serif" />
-                            <div class="tfr-quick-fonts">
-                                <button class="tfr-quick-font-btn" data-font="Arial" data-target="user">Arial</button>
-                                <button class="tfr-quick-font-btn" data-font="Georgia" data-target="user">Georgia</button>
-                                <button class="tfr-quick-font-btn" data-font="'Times New Roman'" data-target="user">Times</button>
-                                <button class="tfr-quick-font-btn" data-font="Verdana" data-target="user">Verdana</button>
+                            <input type="text" id="tfr-user-font-family" placeholder="Type a font name or select from your fonts..." />
+                            <div class="tfr-your-fonts" id="tfr-user-your-fonts">
+                                <span class="tfr-your-fonts-label">Your Fonts:</span>
+                                <span class="tfr-no-fonts-msg">Import fonts in Global tab first</span>
                             </div>
                         </div>
 
@@ -135,12 +129,10 @@
                     <div id="tfr-char-settings-content" style="display: none;">
                         <div class="tfr-form-row">
                             <label for="tfr-char-font-family">Font Family</label>
-                            <input type="text" id="tfr-char-font-family" placeholder="e.g., Georgia, serif" />
-                            <div class="tfr-quick-fonts">
-                                <button class="tfr-quick-font-btn" data-font="Arial" data-target="char">Arial</button>
-                                <button class="tfr-quick-font-btn" data-font="Georgia" data-target="char">Georgia</button>
-                                <button class="tfr-quick-font-btn" data-font="'Times New Roman'" data-target="char">Times</button>
-                                <button class="tfr-quick-font-btn" data-font="Verdana" data-target="char">Verdana</button>
+                            <input type="text" id="tfr-char-font-family" placeholder="Type a font name or select from your fonts..." />
+                            <div class="tfr-your-fonts" id="tfr-char-your-fonts">
+                                <span class="tfr-your-fonts-label">Your Fonts:</span>
+                                <span class="tfr-no-fonts-msg">Import fonts in Global tab first</span>
                             </div>
                         </div>
 

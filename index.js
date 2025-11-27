@@ -124,6 +124,7 @@ function addGoogleFont(fontName) {
     updateGoogleFontsImport();
     saveSettings();
     updateImportedFontsList();
+    updateYourFontsChips();
     
     console.log(`[TypefaceR] Imported Google Font: ${trimmedName}`);
     return true;
@@ -143,6 +144,7 @@ function removeGoogleFont(fontName) {
         updateGoogleFontsImport();
         saveSettings();
         updateImportedFontsList();
+        updateYourFontsChips();
         console.log(`[TypefaceR] Removed Google Font: ${fontName}`);
     }
 }
@@ -414,36 +416,67 @@ function initializeTabs() {
 }
 
 /**
- * Initializes quick font buttons.
+ * Updates the "Your Fonts" chips section for all tabs.
+ * Displays imported Google Fonts as clickable chips.
  */
-function initializeQuickFontButtons() {
-    document.querySelectorAll('.tfr-quick-font-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const font = btn.dataset.font;
-            const target = btn.dataset.target;
-            
-            let inputId;
-            let settingsObj;
-            
-            if (target === 'user') {
-                inputId = 'tfr-user-font-family';
-                settingsObj = settings.user;
-            } else if (target === 'char') {
-                inputId = 'tfr-char-font-family';
-                settingsObj = settings.character;
-            } else {
-                inputId = 'tfr-global-font-family';
-                settingsObj = settings.global;
-            }
-            
-            const input = document.getElementById(inputId);
-            if (input) {
-                input.value = font;
-                settingsObj.fontFamily = font;
-                saveSettings();
-                updateFontStyles();
-            }
-        });
+function updateYourFontsChips() {
+    const configs = [
+        { containerId: 'tfr-global-your-fonts', inputId: 'tfr-global-font-family', settingsObj: settings.global },
+        { containerId: 'tfr-user-your-fonts', inputId: 'tfr-user-font-family', settingsObj: settings.user },
+        { containerId: 'tfr-char-your-fonts', inputId: 'tfr-char-font-family', settingsObj: settings.character },
+    ];
+    
+    configs.forEach(({ containerId, inputId, settingsObj }) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        // Clear existing content
+        container.innerHTML = '';
+        
+        // Add label
+        const label = document.createElement('span');
+        label.className = 'tfr-your-fonts-label';
+        label.textContent = 'Your Fonts:';
+        container.appendChild(label);
+        
+        if (settings.googleFonts.length === 0) {
+            // Show "no fonts" message
+            const noFontsMsg = document.createElement('span');
+            noFontsMsg.className = 'tfr-no-fonts-msg';
+            noFontsMsg.textContent = containerId === 'tfr-global-your-fonts' 
+                ? 'Import fonts in the Google Fonts section below' 
+                : 'Import fonts in Global tab first';
+            container.appendChild(noFontsMsg);
+        } else {
+            // Create chips for each imported font
+            settings.googleFonts.forEach(fontName => {
+                const chip = document.createElement('button');
+                chip.className = 'tfr-font-chip';
+                chip.type = 'button';
+                chip.textContent = fontName;
+                chip.style.fontFamily = `"${fontName}", sans-serif`;
+                chip.title = `Click to use ${fontName}`;
+                
+                // Check if this font is currently selected
+                if (settingsObj.fontFamily && settingsObj.fontFamily.toLowerCase() === fontName.toLowerCase()) {
+                    chip.classList.add('active');
+                }
+                
+                // Click handler to select this font
+                chip.addEventListener('click', () => {
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.value = fontName;
+                        settingsObj.fontFamily = fontName;
+                        saveSettings();
+                        updateFontStyles();
+                        updateYourFontsChips(); // Refresh to update active state
+                    }
+                });
+                
+                container.appendChild(chip);
+            });
+        }
     });
 }
 
@@ -586,6 +619,9 @@ function reloadUIFromSettings() {
     document.getElementById('tfr-char-font-family').value = settings.character.fontFamily || '';
     document.getElementById('tfr-char-font-weight').value = settings.character.fontWeight;
     document.getElementById('tfr-char-font-weight-value').textContent = settings.character.fontWeight;
+    
+    // Refresh Your Fonts chips
+    updateYourFontsChips();
 }
 
 /**
@@ -617,9 +653,11 @@ function initializeUI() {
     
     // Initialize other UI components
     initializeTabs();
-    initializeQuickFontButtons();
     initializeGoogleFontsUI();
     initializeActionButtons();
+    
+    // Initialize "Your Fonts" chips
+    updateYourFontsChips();
 }
 
 /**
