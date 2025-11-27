@@ -368,6 +368,9 @@
 }
 
 .tfr-extension-settings .tfr-font-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     padding: 4px 12px;
     font-size: 0.85em;
     border: 1px solid var(--SmartThemeBorderColor, #444);
@@ -393,4 +396,28 @@
 
 .tfr-extension-settings .tfr-font-chip:active {
     transform: translateY(0);
+}
+
+.tfr-extension-settings .tfr-font-chip .tfr-chip-name {
+    pointer-events: none;
+}
+
+.tfr-extension-settings .tfr-font-chip .tfr-chip-remove {
+    display: none;
+    margin-left: 2px;
+    padding: 0 4px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--SmartThemeQuoteColor, #888);
+    border-radius: 50%;
+    transition: all 0.15s ease;
+}
+
+.tfr-extension-settings .tfr-font-chip.tfr-local-font:hover .tfr-chip-remove {
+    display: inline;
+}
+
+.tfr-extension-settings .tfr-font-chip .tfr-chip-remove:hover {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.15);
 }

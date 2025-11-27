@@ -32,6 +32,7 @@ const DEFAULT_SETTINGS = {
         ...DEFAULT_FONT_SETTINGS,
     },
     googleFonts: [],
+    localFonts: [],
 };
 
 //#endregion
@@ -57,6 +58,7 @@ function initializeSettings() {
     settings.user = { overrideEnabled: false, ...DEFAULT_FONT_SETTINGS, ...settings.user };
     settings.character = { overrideEnabled: false, ...DEFAULT_FONT_SETTINGS, ...settings.character };
     settings.googleFonts = settings.googleFonts || [];
+    settings.localFonts = settings.localFonts || [];
 }
 
 /**
@@ -146,6 +148,52 @@ function removeGoogleFont(fontName) {
         updateImportedFontsList();
         updateYourFontsChips();
         console.log(`[TypefaceR] Removed Google Font: ${fontName}`);
+    }
+}
+
+/**
+ * Adds a local/system font to the saved fonts list.
+ * @param {string} fontName - The name of the font to save.
+ * @returns {boolean} True if the font was added, false if already exists.
+ */
+function addLocalFont(fontName) {
+    const trimmedName = fontName.trim();
+    if (!trimmedName) return false;
+    
+    // Check if it's already a Google Font (case-insensitive)
+    const isGoogleFont = settings.googleFonts.some(
+        f => f.toLowerCase() === trimmedName.toLowerCase()
+    );
+    if (isGoogleFont) return false;
+    
+    // Check if already in local fonts (case-insensitive)
+    const exists = settings.localFonts.some(
+        f => f.toLowerCase() === trimmedName.toLowerCase()
+    );
+    if (exists) return false;
+    
+    settings.localFonts.push(trimmedName);
+    saveSettings();
+    updateYourFontsChips();
+    
+    console.log(`[TypefaceR] Saved local font: ${trimmedName}`);
+    return true;
+}
+
+/**
+ * Removes a local font from the saved fonts list.
+ * @param {string} fontName - The name of the font to remove.
+ */
+function removeLocalFont(fontName) {
+    const index = settings.localFonts.findIndex(
+        f => f.toLowerCase() === fontName.toLowerCase()
+    );
+    
+    if (index !== -1) {
+        settings.localFonts.splice(index, 1);
+        saveSettings();
+        updateYourFontsChips();
+        console.log(`[TypefaceR] Removed local font: ${fontName}`);
     }
 }
 
@@ -354,9 +402,18 @@ function bindFontFamilyInput(inputId, settingsObj, key) {
         settingsObj[key] = input.value.trim();
         saveSettings();
         updateFontStyles();
+        updateYourFontsChips(); // Update active state
     }, 300);
     
     input.addEventListener('input', updateValue);
+    
+    // Save to local fonts on blur if it's a new font
+    input.addEventListener('blur', () => {
+        const fontName = input.value.trim();
+        if (fontName) {
+            addLocalFont(fontName);
+        }
+    });
 }
 
 /**
@@ -416,8 +473,63 @@ function initializeTabs() {
 }
 
 /**
+ * Creates a font chip element.
+ * @param {string} fontName - The font name.
+ * @param {boolean} isLocal - Whether this is a local font.
+ * @param {string} inputId - The input element ID to update.
+ * @param {object} settingsObj - The settings object.
+ * @returns {HTMLElement} The chip element.
+ */
+function createFontChip(fontName, isLocal, inputId, settingsObj) {
+    const chip = document.createElement('div');
+    chip.className = 'tfr-font-chip' + (isLocal ? ' tfr-local-font' : '');
+    chip.style.fontFamily = `"${fontName}", sans-serif`;
+    chip.title = isLocal 
+        ? `Local font: ${fontName} (click to use, × to remove)` 
+        : `Google Font: ${fontName} (click to use)`;
+    
+    // Check if this font is currently selected
+    if (settingsObj.fontFamily && settingsObj.fontFamily.toLowerCase() === fontName.toLowerCase()) {
+        chip.classList.add('active');
+    }
+    
+    // Font name with optional emoji
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'tfr-chip-name';
+    nameSpan.textContent = isLocal ? `${fontName} 💻` : fontName;
+    chip.appendChild(nameSpan);
+    
+    // Remove button for local fonts
+    if (isLocal) {
+        const removeBtn = document.createElement('span');
+        removeBtn.className = 'tfr-chip-remove';
+        removeBtn.innerHTML = '×';
+        removeBtn.title = `Remove ${fontName} from your fonts`;
+        removeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            removeLocalFont(fontName);
+        });
+        chip.appendChild(removeBtn);
+    }
+    
+    // Click handler to select this font
+    chip.addEventListener('click', () => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.value = fontName;
+            settingsObj.fontFamily = fontName;
+            saveSettings();
+            updateFontStyles();
+            updateYourFontsChips();
+        }
+    });
+    
+    return chip;
+}
+
+/**
  * Updates the "Your Fonts" chips section for all tabs.
- * Displays imported Google Fonts as clickable chips.
+ * Displays both Google Fonts and local fonts as clickable chips.
  */
 function updateYourFontsChips() {
     const configs = [
@@ -425,6 +537,8 @@ function updateYourFontsChips() {
         { containerId: 'tfr-user-your-fonts', inputId: 'tfr-user-font-family', settingsObj: settings.user },
         { containerId: 'tfr-char-your-fonts', inputId: 'tfr-char-font-family', settingsObj: settings.character },
     ];
+    
+    const hasAnyFonts = settings.googleFonts.length > 0 || settings.localFonts.length > 0;
     
     configs.forEach(({ containerId, inputId, settingsObj }) => {
         const container = document.getElementById(containerId);
@@ -439,42 +553,23 @@ function updateYourFontsChips() {
         label.textContent = 'Your Fonts:';
         container.appendChild(label);
         
-        if (settings.googleFonts.length === 0) {
+        if (!hasAnyFonts) {
             // Show "no fonts" message
             const noFontsMsg = document.createElement('span');
             noFontsMsg.className = 'tfr-no-fonts-msg';
             noFontsMsg.textContent = containerId === 'tfr-global-your-fonts' 
-                ? 'Import fonts in the Google Fonts section below' 
-                : 'Import fonts in Global tab first';
+                ? 'Type a font name above or import Google Fonts below' 
+                : 'Add fonts in Global tab first';
             container.appendChild(noFontsMsg);
         } else {
-            // Create chips for each imported font
+            // Create chips for Google Fonts first
             settings.googleFonts.forEach(fontName => {
-                const chip = document.createElement('button');
-                chip.className = 'tfr-font-chip';
-                chip.type = 'button';
-                chip.textContent = fontName;
-                chip.style.fontFamily = `"${fontName}", sans-serif`;
-                chip.title = `Click to use ${fontName}`;
-                
-                // Check if this font is currently selected
-                if (settingsObj.fontFamily && settingsObj.fontFamily.toLowerCase() === fontName.toLowerCase()) {
-                    chip.classList.add('active');
-                }
-                
-                // Click handler to select this font
-                chip.addEventListener('click', () => {
-                    const input = document.getElementById(inputId);
-                    if (input) {
-                        input.value = fontName;
-                        settingsObj.fontFamily = fontName;
-                        saveSettings();
-                        updateFontStyles();
-                        updateYourFontsChips(); // Refresh to update active state
-                    }
-                });
-                
-                container.appendChild(chip);
+                container.appendChild(createFontChip(fontName, false, inputId, settingsObj));
+            });
+            
+            // Then local fonts
+            settings.localFonts.forEach(fontName => {
+                container.appendChild(createFontChip(fontName, true, inputId, settingsObj));
             });
         }
     });
