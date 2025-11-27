@@ -1,0 +1,185 @@
+<div id="tfr-extension-settings" class="tfr-extension-settings">
+    <div class="inline-drawer">
+        <div class="inline-drawer-toggle inline-drawer-header">
+            <b>TypefaceR - Font Customizer</b>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+        </div>
+        <div class="inline-drawer-content">
+            <!-- Global Enable Toggle -->
+            <div class="tfr-checkbox-container">
+                <input type="checkbox" id="tfr-enabled" checked />
+                <label for="tfr-enabled">Enable Font Customization</label>
+            </div>
+
+            <!-- Tabs for User/Character/Global Settings -->
+            <div class="tfr-tabs">
+                <div class="tfr-tab active" data-tab="global">Global</div>
+                <div class="tfr-tab" data-tab="user">User Messages</div>
+                <div class="tfr-tab" data-tab="character">Character Messages</div>
+            </div>
+
+            <!-- Global Settings Tab -->
+            <div id="tfr-tab-global" class="tfr-tab-content active">
+                <div class="tfr-settings-group">
+                    <h4>
+                        <i class="fa-solid fa-globe"></i>
+                        Global Font Settings
+                        <span class="margin5 fa-solid fa-circle-info opacity50p tfr-info-icon" title="These settings apply to all messages unless overridden by User/Character specific settings."></span>
+                    </h4>
+                    
+                    <div class="tfr-form-row">
+                        <label for="tfr-global-font-family">
+                            Font Family
+                            <span class="fa-solid fa-circle-info opacity50p tfr-info-icon" title="Enter any font name. Use quotes for fonts with spaces, e.g., 'Comic Sans MS'"></span>
+                        </label>
+                        <input type="text" id="tfr-global-font-family" placeholder="e.g., Arial, 'Times New Roman', sans-serif" />
+                        <div class="tfr-quick-fonts">
+                            <button class="tfr-quick-font-btn" data-font="Arial">Arial</button>
+                            <button class="tfr-quick-font-btn" data-font="Georgia">Georgia</button>
+                            <button class="tfr-quick-font-btn" data-font="'Times New Roman'">Times</button>
+                            <button class="tfr-quick-font-btn" data-font="Verdana">Verdana</button>
+                            <button class="tfr-quick-font-btn" data-font="'Courier New'">Courier</button>
+                            <button class="tfr-quick-font-btn" data-font="system-ui">System</button>
+                        </div>
+                    </div>
+
+                    <div class="tfr-form-row">
+                        <label for="tfr-global-font-weight">Font Weight</label>
+                        <div class="tfr-slider-container">
+                            <input type="range" id="tfr-global-font-weight" class="tfr-slider" min="100" max="900" value="400" step="100" />
+                            <span class="tfr-slider-value" id="tfr-global-font-weight-value">400</span>
+                        </div>
+                        <div class="tfr-weight-labels">
+                            <span>Light</span>
+                            <span>Normal</span>
+                            <span>Bold</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Fonts Import -->
+                <div class="tfr-settings-group tfr-google-fonts-section">
+                    <h4>
+                        <i class="fa-brands fa-google"></i>
+                        Google Fonts
+                        <span class="margin5 fa-solid fa-circle-info opacity50p tfr-info-icon" title="Import fonts from Google Fonts. Enter the font name exactly as shown on fonts.google.com"></span>
+                    </h4>
+                    
+                    <div class="tfr-form-row">
+                        <label for="tfr-google-font-input">Import Google Font</label>
+                        <div class="tfr-google-fonts-input">
+                            <input type="text" id="tfr-google-font-input" placeholder="e.g., Roboto, Open Sans, Lato" />
+                            <button class="tfr-button" id="tfr-import-google-font">
+                                <i class="fa-solid fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tfr-imported-fonts-list" id="tfr-imported-fonts-list">
+                        <div class="tfr-small-desc" style="text-align: center; padding: 8px;">No fonts imported yet</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Messages Tab -->
+            <div id="tfr-tab-user" class="tfr-tab-content">
+                <div class="tfr-settings-group">
+                    <h4>
+                        <i class="fa-solid fa-user"></i>
+                        User Message Font Settings
+                        <span class="margin5 fa-solid fa-circle-info opacity50p tfr-info-icon" title="Override global settings for your messages only."></span>
+                    </h4>
+
+                    <div class="tfr-checkbox-container">
+                        <input type="checkbox" id="tfr-user-override-enabled" />
+                        <label for="tfr-user-override-enabled">Use Custom Font for User Messages</label>
+                    </div>
+
+                    <div id="tfr-user-settings-content" style="display: none;">
+                        <div class="tfr-form-row">
+                            <label for="tfr-user-font-family">Font Family</label>
+                            <input type="text" id="tfr-user-font-family" placeholder="e.g., Arial, sans-serif" />
+                            <div class="tfr-quick-fonts">
+                                <button class="tfr-quick-font-btn" data-font="Arial" data-target="user">Arial</button>
+                                <button class="tfr-quick-font-btn" data-font="Georgia" data-target="user">Georgia</button>
+                                <button class="tfr-quick-font-btn" data-font="'Times New Roman'" data-target="user">Times</button>
+                                <button class="tfr-quick-font-btn" data-font="Verdana" data-target="user">Verdana</button>
+                            </div>
+                        </div>
+
+                        <div class="tfr-form-row">
+                            <label for="tfr-user-font-weight">Font Weight</label>
+                            <div class="tfr-slider-container">
+                                <input type="range" id="tfr-user-font-weight" class="tfr-slider" min="100" max="900" value="400" step="100" />
+                                <span class="tfr-slider-value" id="tfr-user-font-weight-value">400</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Character Messages Tab -->
+            <div id="tfr-tab-character" class="tfr-tab-content">
+                <div class="tfr-settings-group">
+                    <h4>
+                        <i class="fa-solid fa-robot"></i>
+                        Character Message Font Settings
+                        <span class="margin5 fa-solid fa-circle-info opacity50p tfr-info-icon" title="Override global settings for character/AI messages only."></span>
+                    </h4>
+
+                    <div class="tfr-checkbox-container">
+                        <input type="checkbox" id="tfr-char-override-enabled" />
+                        <label for="tfr-char-override-enabled">Use Custom Font for Character Messages</label>
+                    </div>
+
+                    <div id="tfr-char-settings-content" style="display: none;">
+                        <div class="tfr-form-row">
+                            <label for="tfr-char-font-family">Font Family</label>
+                            <input type="text" id="tfr-char-font-family" placeholder="e.g., Georgia, serif" />
+                            <div class="tfr-quick-fonts">
+                                <button class="tfr-quick-font-btn" data-font="Arial" data-target="char">Arial</button>
+                                <button class="tfr-quick-font-btn" data-font="Georgia" data-target="char">Georgia</button>
+                                <button class="tfr-quick-font-btn" data-font="'Times New Roman'" data-target="char">Times</button>
+                                <button class="tfr-quick-font-btn" data-font="Verdana" data-target="char">Verdana</button>
+                            </div>
+                        </div>
+
+                        <div class="tfr-form-row">
+                            <label for="tfr-char-font-weight">Font Weight</label>
+                            <div class="tfr-slider-container">
+                                <input type="range" id="tfr-char-font-weight" class="tfr-slider" min="100" max="900" value="400" step="100" />
+                                <span class="tfr-slider-value" id="tfr-char-font-weight-value">400</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Font Preview Section -->
+            <div class="tfr-settings-group tfr-preview-section">
+                <h5><i class="fa-solid fa-eye"></i> Live Preview</h5>
+                <div class="tfr-preview-text">
+                    <div class="tfr-preview-user" id="tfr-preview-user">
+                        <strong>You:</strong> This is how your messages will look with the current font settings.
+                    </div>
+                    <div class="tfr-preview-char" id="tfr-preview-char">
+                        <strong>Character:</strong> And this is how character messages will appear. The quick brown fox jumps over the lazy dog.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="tfr-actions-row">
+                <button class="tfr-button" id="tfr-export-settings" title="Export settings to clipboard">
+                    <i class="fa-solid fa-download"></i> Export
+                </button>
+                <button class="tfr-button" id="tfr-import-settings" title="Import settings from clipboard">
+                    <i class="fa-solid fa-upload"></i> Import
+                </button>
+                <button class="tfr-button tfr-button-danger" id="tfr-reset-settings" title="Reset all settings to defaults">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

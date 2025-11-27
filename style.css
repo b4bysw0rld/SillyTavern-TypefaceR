@@ -1,0 +1,371 @@
+/* TypefaceR Extension Styles */
+
+/* Extension Settings Container */
+.tfr-extension-settings .tfr-flex-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+}
+
+.tfr-extension-settings .tfr-small-desc {
+    font-size: smaller;
+    color: darkgray;
+    padding: 0;
+    margin-bottom: 4px;
+}
+
+/* Settings Group Styles */
+.tfr-extension-settings .tfr-settings-group {
+    border: 1px solid var(--SmartThemeBorderColor, #333);
+    border-radius: 4px;
+    padding: 12px;
+    margin: 8px 4px;
+}
+
+.tfr-extension-settings .tfr-settings-group h4 {
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Form Row Styles */
+.tfr-extension-settings .tfr-form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.tfr-extension-settings .tfr-form-row:last-child {
+    margin-bottom: 0;
+}
+
+.tfr-extension-settings .tfr-form-row label {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tfr-extension-settings .tfr-form-row input,
+.tfr-extension-settings .tfr-form-row select,
+.tfr-extension-settings .tfr-form-row textarea {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid var(--SmartThemeBorderColor, #444);
+    border-radius: 4px;
+    background: var(--SmartThemeBlurTintColor, #1a1a1a);
+    color: var(--SmartThemeBodyColor, #fff);
+}
+
+.tfr-extension-settings .tfr-form-row select {
+    cursor: pointer;
+}
+
+/* Range Slider Styles */
+.tfr-extension-settings .tfr-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tfr-extension-settings .tfr-slider {
+    flex: 1;
+    min-width: 100px;
+    cursor: pointer;
+}
+
+.tfr-extension-settings .tfr-slider-value {
+    min-width: 50px;
+    text-align: right;
+    font-family: monospace;
+    color: var(--SmartThemeBodyColor, #ccc);
+}
+
+/* Checkbox Styles */
+.tfr-extension-settings .tfr-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.tfr-extension-settings .tfr-checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 3px;
+}
+
+.tfr-extension-settings .tfr-checkbox-container label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+/* Button Styles */
+.tfr-extension-settings .tfr-button {
+    padding: 8px 16px;
+    border: 1px solid var(--SmartThemeBorderColor, #444);
+    border-radius: 4px;
+    background: var(--SmartThemeBlurTintColor, #2a2a2a);
+    color: var(--SmartThemeBodyColor, #fff);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.tfr-extension-settings .tfr-button:hover {
+    background: var(--SmartThemeQuoteColor, #3a3a3a);
+}
+
+.tfr-extension-settings .tfr-button-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+/* Google Fonts Import Section */
+.tfr-extension-settings .tfr-google-fonts-section {
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--SmartThemeBorderColor, #333);
+}
+
+.tfr-extension-settings .tfr-google-fonts-input {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.tfr-extension-settings .tfr-google-fonts-input input {
+    flex: 1;
+}
+
+.tfr-extension-settings .tfr-google-fonts-input .tfr-button {
+    flex-shrink: 0;
+}
+
+/* Imported Fonts List */
+.tfr-extension-settings .tfr-imported-fonts-list {
+    margin-top: 10px;
+    max-height: 120px;
+    overflow-y: auto;
+    border: 1px solid var(--SmartThemeBorderColor, #333);
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.tfr-extension-settings .tfr-imported-font-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+}
+
+.tfr-extension-settings .tfr-imported-font-item:last-child {
+    margin-bottom: 0;
+}
+
+.tfr-extension-settings .tfr-imported-font-item:hover {
+    background: var(--SmartThemeBlurTintColor, #2a2a2a);
+}
+
+.tfr-extension-settings .tfr-imported-font-item .tfr-font-name {
+    font-weight: 500;
+}
+
+.tfr-extension-settings .tfr-imported-font-item .tfr-remove-font {
+    cursor: pointer;
+    color: var(--SmartThemeQuoteColor, #888);
+    padding: 2px 6px;
+    border-radius: 3px;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.tfr-extension-settings .tfr-imported-font-item .tfr-remove-font:hover {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+/* Font Preview Section */
+.tfr-extension-settings .tfr-preview-section {
+    margin-top: 16px;
+    padding: 12px;
+    border: 1px dashed var(--SmartThemeBorderColor, #444);
+    border-radius: 4px;
+}
+
+.tfr-extension-settings .tfr-preview-section h5 {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    color: var(--SmartThemeQuoteColor, #888);
+}
+
+.tfr-extension-settings .tfr-preview-text {
+    padding: 12px;
+    background: var(--SmartThemeBlurTintColor, #1a1a1a);
+    border-radius: 4px;
+    line-height: 1.5;
+}
+
+.tfr-extension-settings .tfr-preview-user {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-left: 3px solid var(--SmartThemeQuoteColor, #4a9eff);
+    background: rgba(74, 158, 255, 0.05);
+    border-radius: 0 4px 4px 0;
+}
+
+.tfr-extension-settings .tfr-preview-char {
+    padding: 8px 12px;
+    border-left: 3px solid var(--SmartThemeQuoteColor, #ff9f4a);
+    background: rgba(255, 159, 74, 0.05);
+    border-radius: 0 4px 4px 0;
+}
+
+/* Separator */
+.tfr-extension-settings .tfr-separator {
+    height: 1px;
+    background: var(--SmartThemeBorderColor, #333);
+    margin: 16px 0;
+    opacity: 0.5;
+}
+
+/* Tabs for User/Character Settings */
+.tfr-extension-settings .tfr-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--SmartThemeBorderColor, #333);
+    padding-bottom: 8px;
+}
+
+.tfr-extension-settings .tfr-tab {
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    background: transparent;
+    color: var(--SmartThemeQuoteColor, #888);
+    transition: all 0.2s ease;
+}
+
+.tfr-extension-settings .tfr-tab:hover {
+    background: var(--SmartThemeBlurTintColor, #2a2a2a);
+}
+
+.tfr-extension-settings .tfr-tab.active {
+    background: var(--SmartThemeBlurTintColor, #2a2a2a);
+    border-color: var(--SmartThemeBorderColor, #444);
+    color: var(--SmartThemeBodyColor, #fff);
+}
+
+.tfr-extension-settings .tfr-tab-content {
+    display: none;
+}
+
+.tfr-extension-settings .tfr-tab-content.active {
+    display: block;
+}
+
+/* Info Icon */
+.tfr-extension-settings .tfr-info-icon {
+    opacity: 0.5;
+    cursor: help;
+}
+
+/* Font Weight Labels */
+.tfr-extension-settings .tfr-weight-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75em;
+    color: var(--SmartThemeQuoteColor, #666);
+    margin-top: 2px;
+}
+
+/* Scrollbar Styling */
+.tfr-extension-settings ::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tfr-extension-settings ::-webkit-scrollbar-track {
+    background: var(--SmartThemeBlurTintColor, #1a1a1a);
+    border-radius: 3px;
+}
+
+.tfr-extension-settings ::-webkit-scrollbar-thumb {
+    background: var(--SmartThemeBorderColor, #444);
+    border-radius: 3px;
+}
+
+.tfr-extension-settings ::-webkit-scrollbar-thumb:hover {
+    background: var(--SmartThemeQuoteColor, #555);
+}
+
+/* Extension Quick Access Menu Button */
+#tfr-extensions-menu-button {
+    cursor: pointer;
+}
+
+#tfr-extensions-menu-button:hover {
+    background: var(--SmartThemeBlurTintColor, rgba(255, 255, 255, 0.1));
+}
+
+/* Reset & Import/Export Buttons */
+.tfr-extension-settings .tfr-actions-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.tfr-extension-settings .tfr-button-danger {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+.tfr-extension-settings .tfr-button-danger:hover {
+    background: rgba(255, 107, 107, 0.15);
+}
+
+/* Inline drawer customization for the extension */
+.tfr-extension-settings .inline-drawer-content {
+    padding: 8px 0;
+}
+
+/* Common System Fonts Quick Select */
+.tfr-extension-settings .tfr-quick-fonts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.tfr-extension-settings .tfr-quick-font-btn {
+    padding: 4px 10px;
+    font-size: 0.85em;
+    border: 1px solid var(--SmartThemeBorderColor, #444);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--SmartThemeBodyColor, #ccc);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tfr-extension-settings .tfr-quick-font-btn:hover {
+    background: var(--SmartThemeBlurTintColor, #2a2a2a);
+    border-color: var(--SmartThemeQuoteColor, #666);
+}
+
+.tfr-extension-settings .tfr-quick-font-btn.active {
+    background: var(--SmartThemeQuoteColor, #3a3a3a);
+    border-color: var(--SmartThemeQuoteColor, #666);
+}

@@ -1,0 +1,12 @@
+{
+    "display_name": "TypefaceR - Font Customizer",
+    "loading_order": 1,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "b4bysw0rld",
+    "version": "1.0.0",
+    "homePage": "https://github.com/b4bysw0rld/SillyTavern-TypefaceR",
+    "auto_update": true
+}
