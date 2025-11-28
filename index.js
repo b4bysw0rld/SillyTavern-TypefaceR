@@ -576,6 +576,57 @@ function updateYourFontsChips() {
 }
 
 /**
+ * Initializes clear buttons for font family inputs.
+ */
+function initializeClearButtons() {
+    document.querySelectorAll('.tfr-clear-input').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.dataset.target;
+            const input = document.getElementById(targetId);
+            if (!input) return;
+            
+            // Clear the input
+            input.value = '';
+            
+            // Update the corresponding settings
+            let settingsObj;
+            if (targetId === 'tfr-global-font-family') {
+                settingsObj = settings.global;
+            } else if (targetId === 'tfr-user-font-family') {
+                settingsObj = settings.user;
+            } else if (targetId === 'tfr-char-font-family') {
+                settingsObj = settings.character;
+            }
+            
+            if (settingsObj) {
+                settingsObj.fontFamily = '';
+                saveSettings();
+                updateFontStyles();
+                updateYourFontsChips();
+            }
+            
+            // Focus the input after clearing
+            input.focus();
+        });
+    });
+}
+
+/**
+ * Initializes collapsible Google Fonts section.
+ */
+function initializeGoogleFontsDrawer() {
+    const toggle = document.getElementById('tfr-google-fonts-toggle');
+    const content = document.getElementById('tfr-google-fonts-content');
+    
+    if (!toggle || !content) return;
+    
+    toggle.addEventListener('click', () => {
+        toggle.classList.toggle('open');
+        content.classList.toggle('open');
+    });
+}
+
+/**
  * Initializes Google Fonts import functionality.
  */
 function initializeGoogleFontsUI() {
@@ -748,6 +799,8 @@ function initializeUI() {
     
     // Initialize other UI components
     initializeTabs();
+    initializeClearButtons();
+    initializeGoogleFontsDrawer();
     initializeGoogleFontsUI();
     initializeActionButtons();
     

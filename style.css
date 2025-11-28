@@ -422,3 +422,81 @@
     color: #ff6b6b;
     background: rgba(255, 107, 107, 0.15);
 }
+
+/* Input with Clear Button */
+.tfr-extension-settings .tfr-input-with-clear {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.tfr-extension-settings .tfr-input-with-clear input {
+    padding-right: 32px;
+}
+
+.tfr-extension-settings .tfr-clear-input {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--SmartThemeQuoteColor, #666);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease, color 0.15s ease;
+    border-radius: 50%;
+}
+
+.tfr-extension-settings .tfr-input-with-clear:hover .tfr-clear-input,
+.tfr-extension-settings .tfr-input-with-clear input:focus + .tfr-clear-input {
+    opacity: 1;
+}
+
+.tfr-extension-settings .tfr-clear-input:hover {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.15);
+}
+
+/* Mini Drawer (Collapsible Section) */
+.tfr-extension-settings .tfr-mini-drawer-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-bottom: 0;
+    transition: opacity 0.2s ease;
+}
+
+.tfr-extension-settings .tfr-mini-drawer-toggle:hover {
+    opacity: 0.8;
+}
+
+.tfr-extension-settings .tfr-mini-drawer-toggle h4 {
+    margin: 0;
+}
+
+.tfr-extension-settings .tfr-mini-drawer-icon {
+    font-size: 0.9em;
+    color: var(--SmartThemeQuoteColor, #888);
+    transition: transform 0.2s ease;
+}
+
+.tfr-extension-settings .tfr-mini-drawer-toggle.open .tfr-mini-drawer-icon {
+    transform: rotate(180deg);
+}
+
+.tfr-extension-settings .tfr-mini-drawer-content {
+    display: none;
+    padding-top: 12px;
+}
+
+.tfr-extension-settings .tfr-mini-drawer-content.open {
+    display: block;
+}

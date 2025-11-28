@@ -32,7 +32,10 @@
                             Font Family
                             <span class="fa-solid fa-circle-info opacity50p tfr-info-icon" title="Enter a font name or click one of your imported fonts below."></span>
                         </label>
-                        <input type="text" id="tfr-global-font-family" placeholder="Type a font name or select from your fonts below..." />
+                        <div class="tfr-input-with-clear">
+                            <input type="text" id="tfr-global-font-family" placeholder="Type a font name or select from your fonts below..." />
+                            <span class="tfr-clear-input" data-target="tfr-global-font-family" title="Clear font">&times;</span>
+                        </div>
                         <div class="tfr-your-fonts" id="tfr-global-your-fonts">
                             <span class="tfr-your-fonts-label">Your Fonts:</span>
                             <span class="tfr-no-fonts-msg">Import fonts in the Google Fonts section below</span>
@@ -55,26 +58,31 @@
                     </div>
                 </div>
 
-                <!-- Google Fonts Import -->
+                <!-- Google Fonts Import (Collapsible) -->
                 <div class="tfr-settings-group tfr-google-fonts-section">
-                    <h4>
-                        <i class="fa-brands fa-google"></i>
-                        Google Fonts
-                        <span class="margin5 fa-solid fa-circle-info opacity50p tfr-info-icon" title="Import fonts from Google Fonts. Enter the font name exactly as shown on fonts.google.com"></span>
-                    </h4>
-                    
-                    <div class="tfr-form-row">
-                        <label for="tfr-google-font-input">Import Google Font</label>
-                        <div class="tfr-google-fonts-input">
-                            <input type="text" id="tfr-google-font-input" placeholder="e.g., Roboto, Open Sans, Lato" />
-                            <button class="tfr-button" id="tfr-import-google-font">
-                                <i class="fa-solid fa-plus"></i> Add
-                            </button>
-                        </div>
+                    <div class="tfr-mini-drawer-toggle" id="tfr-google-fonts-toggle">
+                        <h4>
+                            <i class="fa-brands fa-google"></i>
+                            Google Fonts
+                            <span class="margin5 fa-solid fa-circle-info opacity50p tfr-info-icon" title="Import fonts from Google Fonts. Enter the font name exactly as shown on fonts.google.com"></span>
+                        </h4>
+                        <i class="fa-solid fa-chevron-down tfr-mini-drawer-icon"></i>
                     </div>
                     
-                    <div class="tfr-imported-fonts-list" id="tfr-imported-fonts-list">
-                        <div class="tfr-small-desc" style="text-align: center; padding: 8px;">No fonts imported yet</div>
+                    <div class="tfr-mini-drawer-content" id="tfr-google-fonts-content">
+                        <div class="tfr-form-row">
+                            <label for="tfr-google-font-input">Import Google Font</label>
+                            <div class="tfr-google-fonts-input">
+                                <input type="text" id="tfr-google-font-input" placeholder="e.g., Roboto, Open Sans, Lato" />
+                                <button class="tfr-button" id="tfr-import-google-font">
+                                    <i class="fa-solid fa-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="tfr-imported-fonts-list" id="tfr-imported-fonts-list">
+                            <div class="tfr-small-desc" style="text-align: center; padding: 8px;">No fonts imported yet</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -96,7 +104,10 @@
                     <div id="tfr-user-settings-content" style="display: none;">
                         <div class="tfr-form-row">
                             <label for="tfr-user-font-family">Font Family</label>
-                            <input type="text" id="tfr-user-font-family" placeholder="Type a font name or select from your fonts..." />
+                            <div class="tfr-input-with-clear">
+                                <input type="text" id="tfr-user-font-family" placeholder="Type a font name or select from your fonts..." />
+                                <span class="tfr-clear-input" data-target="tfr-user-font-family" title="Clear font">&times;</span>
+                            </div>
                             <div class="tfr-your-fonts" id="tfr-user-your-fonts">
                                 <span class="tfr-your-fonts-label">Your Fonts:</span>
                                 <span class="tfr-no-fonts-msg">Import fonts in Global tab first</span>
@@ -138,7 +149,10 @@
                     <div id="tfr-char-settings-content" style="display: none;">
                         <div class="tfr-form-row">
                             <label for="tfr-char-font-family">Font Family</label>
-                            <input type="text" id="tfr-char-font-family" placeholder="Type a font name or select from your fonts..." />
+                            <div class="tfr-input-with-clear">
+                                <input type="text" id="tfr-char-font-family" placeholder="Type a font name or select from your fonts..." />
+                                <span class="tfr-clear-input" data-target="tfr-char-font-family" title="Clear font">&times;</span>
+                            </div>
                             <div class="tfr-your-fonts" id="tfr-char-your-fonts">
                                 <span class="tfr-your-fonts-label">Your Fonts:</span>
                                 <span class="tfr-no-fonts-msg">Import fonts in Global tab first</span>
