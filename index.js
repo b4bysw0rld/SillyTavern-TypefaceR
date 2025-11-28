@@ -811,6 +811,367 @@ function initializeUI() {
 /**
  * Adds a button to the Extensions dropdown menu for quick access.
  */
+//#region Popout Panel
+
+let popoutVisible = false;
+let $popout = null;
+
+/**
+ * Toggles the floating settings popout panel.
+ */
+function togglePopout() {
+    if (popoutVisible) {
+        closePopout();
+    } else {
+        openPopout();
+    }
+}
+
+/**
+ * Opens the floating settings popout panel.
+ */
+function openPopout() {
+    if (popoutVisible) return;
+    
+    const $drawerContent = $('#tfr-extension-settings .inline-drawer-content');
+    if ($drawerContent.length === 0) {
+        console.warn('[TypefaceR] Settings drawer content not found');
+        return;
+    }
+    
+    // Create popout container
+    $popout = $(`
+        <div id="tfr-popout" class="draggable">
+            <div class="tfr-popout-header">
+                <div class="tfr-popout-title">
+                    <i class="fa-solid fa-font"></i>
+                    <span>TypefaceR</span>
+                </div>
+                <div class="tfr-popout-close" title="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+            </div>
+            <div id="tfr-popout-content"></div>
+        </div>
+    `);
+    
+    // Add to page
+    $('body').append($popout);
+    
+    // Clone and move content to popout
+    const $contentClone = $drawerContent.clone(true, true);
+    $popout.find('#tfr-popout-content').append($contentClone);
+    $contentClone.show();
+    
+    // Re-bind UI elements in the popout
+    rebindPopoutUI();
+    
+    // Close button handler
+    $popout.find('.tfr-popout-close').on('click', closePopout);
+    
+    // Close on Escape key
+    $(document).on('keydown.tfr_popout', (e) => {
+        if (e.key === 'Escape') {
+            closePopout();
+        }
+    });
+    
+    // Make draggable if dragElement is available
+    if (typeof window.dragElement === 'function') {
+        window.dragElement($popout);
+    }
+    
+    // Show with animation
+    $popout.fadeIn(200);
+    popoutVisible = true;
+    
+    // Update menu button state
+    updateMenuButtonState();
+}
+
+/**
+ * Closes the floating settings popout panel.
+ */
+function closePopout() {
+    if (!popoutVisible || !$popout) return;
+    
+    $popout.fadeOut(200, () => {
+        $popout.remove();
+        $popout = null;
+    });
+    
+    popoutVisible = false;
+    $(document).off('keydown.tfr_popout');
+    
+    // Update menu button state
+    updateMenuButtonState();
+}
+
+/**
+ * Rebinds UI elements in the popout after cloning.
+ */
+function rebindPopoutUI() {
+    if (!$popout) return;
+    
+    const popoutEl = $popout[0];
+    
+    // Re-bind sliders
+    const sliderConfigs = [
+        { inputId: 'tfr-global-font-weight', valueId: 'tfr-global-font-weight-value', settingsObj: settings.global, key: 'fontWeight' },
+        { inputId: 'tfr-user-font-weight', valueId: 'tfr-user-font-weight-value', settingsObj: settings.user, key: 'fontWeight' },
+        { inputId: 'tfr-char-font-weight', valueId: 'tfr-char-font-weight-value', settingsObj: settings.character, key: 'fontWeight' },
+    ];
+    
+    sliderConfigs.forEach(({ inputId, valueId, settingsObj, key }) => {
+        const input = popoutEl.querySelector(`#${inputId}`);
+        const valueDisplay = popoutEl.querySelector(`#${valueId}`);
+        if (input && valueDisplay) {
+            input.value = settingsObj[key];
+            valueDisplay.textContent = settingsObj[key];
+            input.addEventListener('input', debounce(() => {
+                const value = parseFloat(input.value);
+                settingsObj[key] = value;
+                valueDisplay.textContent = value;
+                saveSettings();
+                updateFontStyles();
+            }, 50));
+        }
+    });
+    
+    // Re-bind font family inputs
+    const fontInputConfigs = [
+        { inputId: 'tfr-global-font-family', settingsObj: settings.global },
+        { inputId: 'tfr-user-font-family', settingsObj: settings.user },
+        { inputId: 'tfr-char-font-family', settingsObj: settings.character },
+    ];
+    
+    fontInputConfigs.forEach(({ inputId, settingsObj }) => {
+        const input = popoutEl.querySelector(`#${inputId}`);
+        if (input) {
+            input.value = settingsObj.fontFamily || '';
+            const updateValue = debounce(() => {
+                settingsObj.fontFamily = input.value.trim();
+                saveSettings();
+                updateFontStyles();
+                updateYourFontsChips();
+            }, 300);
+            input.addEventListener('input', updateValue);
+            input.addEventListener('blur', () => {
+                const fontName = input.value.trim();
+                if (fontName) addLocalFont(fontName);
+            });
+        }
+    });
+    
+    // Re-bind clear buttons
+    popoutEl.querySelectorAll('.tfr-clear-input').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.dataset.target;
+            const input = popoutEl.querySelector(`#${targetId}`);
+            if (!input) return;
+            
+            input.value = '';
+            let settingsObj;
+            if (targetId === 'tfr-global-font-family') settingsObj = settings.global;
+            else if (targetId === 'tfr-user-font-family') settingsObj = settings.user;
+            else if (targetId === 'tfr-char-font-family') settingsObj = settings.character;
+            
+            if (settingsObj) {
+                settingsObj.fontFamily = '';
+                saveSettings();
+                updateFontStyles();
+                updateYourFontsChips();
+            }
+            input.focus();
+        });
+    });
+    
+    // Re-bind tabs
+    const tabs = popoutEl.querySelectorAll('.tfr-tab');
+    const tabContents = popoutEl.querySelectorAll('.tfr-tab-content');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.dataset.tab;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === `tfr-tab-${targetTab}`) {
+                    content.classList.add('active');
+                }
+            });
+        });
+    });
+    
+    // Re-bind checkboxes
+    const enabledCheckbox = popoutEl.querySelector('#tfr-enabled');
+    if (enabledCheckbox) {
+        enabledCheckbox.checked = settings.enabled;
+        enabledCheckbox.addEventListener('change', () => {
+            settings.enabled = enabledCheckbox.checked;
+            saveSettings();
+            updateFontStyles();
+        });
+    }
+    
+    // Override toggles
+    const overrideConfigs = [
+        { checkboxId: 'tfr-user-override-enabled', contentId: 'tfr-user-settings-content', settingsObj: settings.user, key: 'overrideEnabled' },
+        { checkboxId: 'tfr-char-override-enabled', contentId: 'tfr-char-settings-content', settingsObj: settings.character, key: 'overrideEnabled' },
+    ];
+    
+    overrideConfigs.forEach(({ checkboxId, contentId, settingsObj, key }) => {
+        const checkbox = popoutEl.querySelector(`#${checkboxId}`);
+        const content = popoutEl.querySelector(`#${contentId}`);
+        if (checkbox) {
+            checkbox.checked = settingsObj[key];
+            if (content) content.style.display = settingsObj[key] ? 'block' : 'none';
+            checkbox.addEventListener('change', () => {
+                settingsObj[key] = checkbox.checked;
+                if (content) content.style.display = checkbox.checked ? 'block' : 'none';
+                saveSettings();
+                updateFontStyles();
+            });
+        }
+    });
+    
+    // Re-bind Google Fonts drawer toggle
+    const gfToggle = popoutEl.querySelector('#tfr-google-fonts-toggle');
+    const gfContent = popoutEl.querySelector('#tfr-google-fonts-content');
+    if (gfToggle && gfContent) {
+        gfToggle.addEventListener('click', () => {
+            gfToggle.classList.toggle('open');
+            gfContent.classList.toggle('open');
+        });
+    }
+    
+    // Re-bind Google Fonts import
+    const gfInput = popoutEl.querySelector('#tfr-google-font-input');
+    const gfAddBtn = popoutEl.querySelector('#tfr-import-google-font');
+    if (gfInput && gfAddBtn) {
+        const handleImport = () => {
+            const fontName = gfInput.value.trim();
+            if (fontName && addGoogleFont(fontName)) {
+                gfInput.value = '';
+            }
+        };
+        gfAddBtn.addEventListener('click', handleImport);
+        gfInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleImport();
+            }
+        });
+    }
+    
+    // Update Your Fonts chips in popout
+    updateYourFontsChipsInElement(popoutEl);
+}
+
+/**
+ * Updates Your Fonts chips within a specific element (for popout).
+ */
+function updateYourFontsChipsInElement(containerEl) {
+    const configs = [
+        { containerId: 'tfr-global-your-fonts', inputId: 'tfr-global-font-family', settingsObj: settings.global },
+        { containerId: 'tfr-user-your-fonts', inputId: 'tfr-user-font-family', settingsObj: settings.user },
+        { containerId: 'tfr-char-your-fonts', inputId: 'tfr-char-font-family', settingsObj: settings.character },
+    ];
+    
+    const hasAnyFonts = settings.googleFonts.length > 0 || settings.localFonts.length > 0;
+    
+    configs.forEach(({ containerId, inputId, settingsObj }) => {
+        const container = containerEl.querySelector(`#${containerId}`);
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        const label = document.createElement('span');
+        label.className = 'tfr-your-fonts-label';
+        label.textContent = 'Your Fonts:';
+        container.appendChild(label);
+        
+        if (!hasAnyFonts) {
+            const noFontsMsg = document.createElement('span');
+            noFontsMsg.className = 'tfr-no-fonts-msg';
+            noFontsMsg.textContent = containerId === 'tfr-global-your-fonts' 
+                ? 'Type a font name above or import Google Fonts below' 
+                : 'Add fonts in Global tab first';
+            container.appendChild(noFontsMsg);
+        } else {
+            settings.googleFonts.forEach(fontName => {
+                container.appendChild(createFontChipForElement(fontName, false, inputId, settingsObj, containerEl));
+            });
+            settings.localFonts.forEach(fontName => {
+                container.appendChild(createFontChipForElement(fontName, true, inputId, settingsObj, containerEl));
+            });
+        }
+    });
+}
+
+/**
+ * Creates a font chip for a specific container element.
+ */
+function createFontChipForElement(fontName, isLocal, inputId, settingsObj, containerEl) {
+    const chip = document.createElement('div');
+    chip.className = 'tfr-font-chip' + (isLocal ? ' tfr-local-font' : '');
+    chip.style.fontFamily = `"${fontName}", sans-serif`;
+    chip.title = isLocal ? `Local font: ${fontName}` : `Google Font: ${fontName}`;
+    
+    if (settingsObj.fontFamily && settingsObj.fontFamily.toLowerCase() === fontName.toLowerCase()) {
+        chip.classList.add('active');
+    }
+    
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'tfr-chip-name';
+    nameSpan.textContent = isLocal ? `${fontName} 💻` : fontName;
+    chip.appendChild(nameSpan);
+    
+    if (isLocal) {
+        const removeBtn = document.createElement('span');
+        removeBtn.className = 'tfr-chip-remove';
+        removeBtn.innerHTML = '×';
+        removeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            removeLocalFont(fontName);
+            if ($popout) updateYourFontsChipsInElement($popout[0]);
+        });
+        chip.appendChild(removeBtn);
+    }
+    
+    chip.addEventListener('click', () => {
+        const input = containerEl.querySelector(`#${inputId}`);
+        if (input) {
+            input.value = fontName;
+            settingsObj.fontFamily = fontName;
+            saveSettings();
+            updateFontStyles();
+            updateYourFontsChips();
+            if ($popout) updateYourFontsChipsInElement($popout[0]);
+        }
+    });
+    
+    return chip;
+}
+
+/**
+ * Updates the menu button active state.
+ */
+function updateMenuButtonState() {
+    const button = document.getElementById('tfr-extensions-menu-button');
+    if (button) {
+        if (popoutVisible) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    }
+}
+
+//#endregion
+
+//#region Extension Menu Button
+
 function addExtensionMenuButton() {
     const extensionsMenu = document.getElementById('extensionsMenu');
     if (!extensionsMenu) {
@@ -836,39 +1197,8 @@ function addExtensionMenuButton() {
     
     extensionsMenu.appendChild(button);
     
-    // Click handler to scroll to and open settings
-    button.addEventListener('click', () => {
-        const settingsDrawer = document.getElementById('tfr-extension-settings');
-        if (!settingsDrawer) {
-            console.warn('[TypefaceR] Settings drawer not found');
-            return;
-        }
-        
-        // Scroll to settings
-        settingsDrawer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-        // Open the drawer if closed
-        const drawerToggle = settingsDrawer.querySelector('.inline-drawer-toggle');
-        const drawerContent = settingsDrawer.querySelector('.inline-drawer-content');
-        const drawerIcon = settingsDrawer.querySelector('.inline-drawer-icon');
-        
-        if (drawerToggle && drawerContent && !drawerContent.classList.contains('open')) {
-            drawerToggle.classList.add('open');
-            drawerContent.classList.add('open');
-            if (drawerIcon) {
-                drawerIcon.classList.remove('down');
-                drawerIcon.classList.add('up');
-            }
-        }
-        
-        // Brief highlight effect
-        settingsDrawer.style.transition = 'background-color 0.3s ease';
-        const originalBg = settingsDrawer.style.backgroundColor;
-        settingsDrawer.style.backgroundColor = 'rgba(var(--SmartThemeBodyColor), 0.3)';
-        setTimeout(() => {
-            settingsDrawer.style.backgroundColor = originalBg;
-        }, 600);
-    });
+    // Click handler to toggle popout
+    button.addEventListener('click', togglePopout);
 }
 
 //#endregion

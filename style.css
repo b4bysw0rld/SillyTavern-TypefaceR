@@ -500,3 +500,92 @@
 .tfr-extension-settings .tfr-mini-drawer-content.open {
     display: block;
 }
+
+/* Floating Popout Panel Styles */
+#tfr-popout {
+    position: fixed;
+    top: 100px;
+    right: 50px;
+    width: 400px;
+    max-width: calc(100vw - 100px);
+    max-height: 80vh;
+    background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.85));
+    border: 1px solid var(--SmartThemeBorderColor, #444);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.tfr-popout-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.5));
+    border-bottom: 1px solid var(--SmartThemeBorderColor, #444);
+    cursor: move;
+    user-select: none;
+}
+
+.tfr-popout-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--SmartThemeBodyColor, #fff);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tfr-popout-close {
+    background: transparent;
+    border: none;
+    color: var(--SmartThemeBodyColor, #aaa);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    line-height: 1;
+    transition: all 0.15s ease;
+}
+
+.tfr-popout-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--SmartThemeBodyColor, #fff);
+}
+
+#tfr-popout-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+}
+
+/* Override drawer content styles when in popout */
+#tfr-popout .tfr-extension-settings {
+    padding: 12px;
+}
+
+#tfr-popout .tfr-settings-group {
+    margin: 8px 0;
+}
+
+/* Make popout draggable (requires jQuery UI or manual implementation) */
+#tfr-popout.ui-draggable-dragging {
+    opacity: 0.9;
+}
+
+/* Responsive adjustments for popout */
+@media (max-width: 600px) {
+    #tfr-popout {
+        width: calc(100vw - 40px);
+        right: 20px;
+        left: 20px;
+        top: 80px;
+    }
+}
