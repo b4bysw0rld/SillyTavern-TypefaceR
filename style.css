@@ -78,7 +78,7 @@
     margin-left: auto;
     padding: 2px 8px;
     font-family: monospace;
-    font-size: 0.85em;
+    font-weight: 500;
     color: var(--SmartThemeBodyColor, #ccc);
     background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.2));
     border-radius: 4px;
