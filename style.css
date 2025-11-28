@@ -67,20 +67,21 @@
 .tfr-extension-settings .tfr-slider-container {
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
 .tfr-extension-settings .tfr-slider {
-    flex: 1;
-    min-width: 100px;
+    width: 100%;
     cursor: pointer;
 }
 
 .tfr-extension-settings .tfr-slider-value {
-    min-width: 50px;
-    text-align: right;
+    margin-left: auto;
+    padding: 2px 8px;
     font-family: monospace;
+    font-size: 0.85em;
     color: var(--SmartThemeBodyColor, #ccc);
+    background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.2));
+    border-radius: 4px;
 }
 
 /* Checkbox Styles */
