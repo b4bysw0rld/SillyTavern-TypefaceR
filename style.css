@@ -313,10 +313,16 @@
 /* Extension Quick Access Menu Button */
 #tfr-extensions-menu-button {
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 #tfr-extensions-menu-button:hover {
     background: var(--SmartThemeBlurTintColor, rgba(255, 255, 255, 0.1));
+}
+
+#tfr-extensions-menu-button.active {
+    background: var(--customThemeColor, var(--SmartThemeQuoteColor, rgba(255, 255, 255, 0.15)));
+    color: var(--SmartThemeBodyColor, #fff);
 }
 
 /* Reset & Import/Export Buttons */
@@ -504,32 +510,39 @@
 /* Floating Popout Panel Styles */
 #tfr-popout {
     position: fixed;
-    top: 100px;
-    right: 50px;
-    width: 400px;
-    max-width: calc(100vw - 100px);
-    max-height: 80vh;
+    top: var(--topBarBlockSize, 45px);
+    left: 0;
+    width: 380px;
+    max-width: calc((100vw - var(--sheldWidth, 800px)) / 2);
+    max-height: calc(100dvh - var(--topBarBlockSize, 45px));
     background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.85));
-    border: 1px solid var(--SmartThemeBorderColor, #444);
-    border-radius: 8px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 25%, transparent);
+    border-right: 1px solid color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 15%, transparent);
+    border-radius: 0;
+    box-shadow: 2px 0 15px color-mix(in srgb, var(--SmartThemeShadowColor, #000) 50%, transparent);
+    z-index: 10000;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(var(--SmartThemeBlurStrength, 10px));
+    -webkit-backdrop-filter: blur(var(--SmartThemeBlurStrength, 10px));
 }
 
 .tfr-popout-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 15px;
-    background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.5));
-    border-bottom: 1px solid var(--SmartThemeBorderColor, #444);
+    padding: 12px 15px;
+    background: color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.5)) 80%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 25%, transparent);
     cursor: move;
     user-select: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(var(--SmartThemeBlurStrength, 10px));
+    -webkit-backdrop-filter: blur(var(--SmartThemeBlurStrength, 10px));
 }
 
 .tfr-popout-title {
@@ -540,52 +553,92 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    letter-spacing: 0.5px;
+}
+
+.tfr-popout-title i {
+    color: var(--customThemeColor, var(--SmartThemeQuoteColor, #888));
 }
 
 .tfr-popout-close {
     background: transparent;
     border: none;
     color: var(--SmartThemeBodyColor, #aaa);
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
-    padding: 4px 8px;
+    padding: 6px 10px;
     border-radius: 4px;
     line-height: 1;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
+    opacity: 0.7;
 }
 
 .tfr-popout-close:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 15%, transparent);
     color: var(--SmartThemeBodyColor, #fff);
+    opacity: 1;
 }
 
 #tfr-popout-content {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0;
+    padding: 0 15px 15px 15px;
 }
 
 /* Override drawer content styles when in popout */
 #tfr-popout .tfr-extension-settings {
-    padding: 12px;
+    padding: 12px 0;
 }
 
 #tfr-popout .tfr-settings-group {
-    margin: 8px 0;
+    margin: 10px 0;
+    border-color: color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 15%, transparent);
 }
 
-/* Make popout draggable (requires jQuery UI or manual implementation) */
+#tfr-popout .tfr-settings-group h4 {
+    font-size: 0.95em;
+}
+
+#tfr-popout .tfr-tabs {
+    position: sticky;
+    top: 0;
+    background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.85));
+    backdrop-filter: blur(var(--SmartThemeBlurStrength, 10px));
+    -webkit-backdrop-filter: blur(var(--SmartThemeBlurStrength, 10px));
+    z-index: 50;
+    padding-top: 8px;
+    margin-bottom: 8px;
+}
+
+#tfr-popout .tfr-tab {
+    padding: 6px 12px;
+    font-size: 0.9em;
+}
+
+#tfr-popout .tfr-preview-section {
+    margin-top: 12px;
+}
+
+#tfr-popout .tfr-actions-row {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid color-mix(in srgb, var(--SmartThemeBodyColor, #fff) 15%, transparent);
+}
+
+/* Make popout draggable */
 #tfr-popout.ui-draggable-dragging {
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 /* Responsive adjustments for popout */
-@media (max-width: 600px) {
+@media (max-width: 1000px) {
     #tfr-popout {
-        width: calc(100vw - 40px);
-        right: 20px;
-        left: 20px;
-        top: 80px;
+        width: 100%;
+        max-width: 100vw;
+        left: 0;
+        right: 0;
+        border-right: 0;
+        max-height: calc(100dvh - var(--topBarBlockSize, 45px) - var(--bottomFormBlockSize, 50px));
     }
 }
